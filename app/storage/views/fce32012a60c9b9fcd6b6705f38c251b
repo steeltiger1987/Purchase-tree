@@ -1,0 +1,32 @@
+
+    <?php $__env->startSection('body'); ?>
+        <div class="container">
+
+                <?php $i =0; ?>
+                <?php foreach($category as $categories): ?>
+                    <?php if($i%3 ==0){?>
+                    <div class="row" style="margin-top: 20px">
+                    <?php }?>
+                        <div class="col-md-4">
+                            <div class="headline">
+                                <h2><?php echo $categories->categoryname; ?></h2>
+                            </div>
+                            <ul class="list-unstyled">
+                                <?php $subcategory = $categories->subCategories?>
+                                <?php foreach($subcategory as $subcategories): ?>
+                                    <li><a href="<?php echo URL::route('user.category.sub',100000*1+$subcategories->id); ?>"><?php echo ucfirst($subcategories->subcategoryname); ?></a></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                     <?php if(($i%3 == 2) ||($i==(count($category)-1))){?>
+                    </div>
+                    <?php }
+                        $i++;
+                    ?>
+                <?php endforeach; ?>
+
+        </div>
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('user.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

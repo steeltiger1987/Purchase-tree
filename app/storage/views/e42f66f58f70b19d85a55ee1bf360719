@@ -1,0 +1,13 @@
+<?php if(count($productPicture1)>0): ?>
+    <a id="Zoom-1" class="MagicZoom" href="<?php echo HTTP_LOGO_PATH.$productPicture1[0]->picture_url; ?>">
+        <img src="<?php echo HTTP_LOGO_PATH.$productPicture1[0]->picture_url; ?>?scale.height=400"  id="imageList">
+    </a>
+    <div class="selectors">
+        <?php foreach($productPicture1 as $key_productpicture =>$value_productpicture ): ?>
+            <a data-zoom-id="Zoom-1" href="<?php echo HTTP_LOGO_PATH.$value_productpicture->picture_url; ?>"
+               data-image="<?php echo HTTP_LOGO_PATH.$value_productpicture->picture_url; ?>?scale.height=400" class="mz-thumb">
+                <img srcset="<?php echo HTTP_LOGO_PATH.$value_productpicture->picture_url; ?>?scale.width=112 2x" src="<?php echo HTTP_LOGO_PATH.$value_productpicture->picture_url; ?>?scale.width=56"/>
+            </a>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>

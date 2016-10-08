@@ -1,0 +1,14 @@
+
+    <?php $__env->startSection('body-content'); ?>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="helpList">
+                    <?php foreach($helps as $help): ?>
+                        <li><a href="<?php echo URL::route('user.help.faq_item',100000*1+$help->id); ?>"><?php echo $help->title; ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('user.help.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

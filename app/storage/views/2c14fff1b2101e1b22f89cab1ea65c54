@@ -1,0 +1,86 @@
+
+<?php $__env->startSection('body'); ?>
+    <h3 class="page-title">Add ShoppingCart FAQ Management</h3>
+    <!-- page layout -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="<?php echo URL::route('admin.dashboard'); ?>">Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <i class="fa fa-pencil"></i>
+                <a href="<?php echo URL::route('admin.shoppingCart.description'); ?>">ShoppingCart FAQ</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <?php if(isset($description)): ?>
+                    <a href="<?php echo URL::route('admin.shoppingCart.description.edit',$description->id); ?>">Edit ShoppingCart FAQ</a>
+                <?php else: ?>
+                <a href="<?php echo URL::route('admin.shoppingCart.description.create'); ?>">Add ShoppingCart FAQ</a>
+                <?php endif; ?>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet box blue">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <?php if(isset($description)): ?> Edit <?php else: ?> Add <?php endif; ?> ShoppingCart FAQ
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <?php if($errors->has()): ?>
+                        <div class="alert alert-danger alert-dismissibl fade in">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <?php foreach($errors->all() as $error): ?>
+                                <?php echo $error; ?>
+
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                    <form  class="form-horizontal" id="addCategoryFiledForm" method="POST" action="<?php echo URL::route('admin.shoppingCart.description.store'); ?>" enctype="multipart/form-data">
+                        <input type="hidden" value="<?php if(isset($description)): ?> <?php echo $description->id; ?> <?php endif; ?>" name="descriptionID">
+                        <div class="form-body">
+                            <?php foreach([
+                                    'title' => 'Title',
+                                    'description' => 'Description',]
+                                     as $key=> $value): ?>
+                                    <?php if($key === 'title'): ?>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label"><?php echo Form::label($key, $value); ?></label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input type="text" name="title" class="form-control" value="<?php if(isset($description)): ?><?php echo $description->title; ?> <?php endif; ?>">
+                                        </div>
+                                    </div>
+                                    <?php else: ?>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label"><?php echo Form::label($key, $value); ?></label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <textarea name="description" class="form-control" rows="10"><?php if(isset($description)): ?><?php echo $description->description; ?> <?php endif; ?></textarea>
+                                        </div>
+                                    </div>
+                                    <?php endif; ?>
+                            <?php endforeach; ?>
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-offset-7 col-md-5">
+                                            <button   class="btn  blue" type="submit" ><i class="fa fa-check-circle-o" style="margin-right:4px"></i><?php if(isset($description)): ?> Update <?php else: ?> Save <?php endif; ?></button>
+                                            <a class="btn  green" href="<?php echo URL::route('admin.shoppingCart.description'); ?>"><i class="fa fa-repeat" style="margin-right:4px"></i>Cancel</a>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,128 @@
+
+    <?php $__env->startSection('custom-styles'); ?>
+        <link rel="stylesheet" href="/assets/asset_view/shop-ui/plugins/jquery-steps/css/custom-jquery.steps.css">
+        <?php echo HTML::style('/assets/asset_view/plugins/sky-forms-pro/skyforms/css/sky-forms.css'); ?>
+
+        <?php echo HTML::style('/assets/asset_view/plugins/sky-forms-pro/skyforms/custom/custom-sky-forms.css'); ?>
+
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('body'); ?>
+        <div class="container content">
+            <div class="row margin-bottom-20">
+                <div class="col-md-12 margin-bottom-20">
+                    <?php if (isset($alert)) { ?>
+                    <div class="alert alert-<?php echo $alert['type'];?> alert-dismissibl fade in">
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span aria-hidden="true">&times;</span>
+                            <span class="sr-only">Close</span>
+                        </button>
+                        <p>
+                            <?php echo $alert['msg'];?>
+                        </p>
+                    </div>
+                    <?php } ?>
+                    <h2 class="text-center">
+                        <?php if($shoppingCart->type == "credit"): ?>
+                            <?php echo trans('cart.credit_payment'); ?>
+
+                        <?php elseif($shoppingCart->type == "check"): ?>
+                            <?php echo trans('cart.credit_payment'); ?>
+
+
+                        <?php endif; ?>
+                    </h2>
+                </div>
+                <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+                    <?php if($shoppingCart->type == "credit"): ?>
+                        <form class="form-horizontal" action="<?php echo URL::route('user.addCart.credit'); ?>" method="POST">
+                            <input type="hidden" name="shoppingCart" value="<?php echo $shoppingCart->id; ?>">
+                            <div class="form-group">
+                                <label for="inputEmail1" class="col-lg-2 col-md-3 col-sm-3 col-xs-4 control-label"><?php echo Lang::get('user.card_no'); ?><span class="font-red">*</span></label>
+                                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-8">
+                                    <input type="text" class="form-control" id="inputEmail1" name="card_no" placeholder="<?php echo Lang::get('user.card_no'); ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail1" class="col-lg-2 col-md-3 col-sm-3 col-xs-4 control-label"><?php echo Lang::get('user.exp_month'); ?><span class="font-red">*</span></label>
+                                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-8">
+                                    <input type="text" class="form-control" id="inputEmail1" name="exp_month" placeholder="<?php echo Lang::get('user.exp_month'); ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail1" class="col-lg-2 col-md-3 col-sm-3 col-xs-4 control-label"><?php echo Lang::get('user.exp_year'); ?><span class="font-red">*</span></label>
+                                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-8">
+                                    <input type="text" class="form-control" id="inputEmail1" name="exp_year" placeholder="<?php echo Lang::get('user.exp_year'); ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail1" class="col-lg-2 col-md-3 col-sm-3 col-xs-4 control-label"><?php echo Lang::get('cart.total'); ?><span class="font-red">*</span></label>
+                                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-8">
+                                    <input type="text" class="form-control" id="inputEmail1" name="total" readonly value="<?php echo $shoppingCart->total." USD"; ?>" id="paymentCreditTotalValue">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail1" class="col-lg-2 col-md-3 col-sm-3 col-xs-4 control-label"><?php echo Lang::get('user.address'); ?><span class="font-red">*</span></label>
+                                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-8">
+                                    <input type="text" class="form-control" id="inputEmail1" name="address" placeholder="<?php echo Lang::get('user.address'); ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail1" class="col-lg-2 col-md-3 col-sm-3 col-xs-4 control-label"><?php echo Lang::get('user.zip_code'); ?><span class="font-red">*</span></label>
+                                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-8">
+                                    <input type="text" class="form-control" id="inputEmail1" name="zipCode" placeholder="<?php echo Lang::get('user.zip_code'); ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail1" class="col-lg-2 col-md-3 col-sm-3 col-xs-4 control-label"><?php echo Lang::get('user.email'); ?><span class="font-red">*</span></label>
+                                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-8">
+                                    <input type="text" class="form-control" id="inputEmail1" name="email" placeholder="<?php echo Lang::get('user.email'); ?>">
+                                </div>
+                            </div>
+                            <div class="form-group margin-bottom-40">
+                                <label for="inputEmail1" class="col-lg-2 col-md-3 col-sm-3 col-xs-4 control-label"><?php echo Lang::get('user.cvv2'); ?><span class="font-red">*</span></label>
+                                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-8">
+                                    <input type="text" class="form-control" id="inputEmail1" name="cvv2" placeholder="<?php echo Lang::get('user.cvv2'); ?>">
+                                </div>
+                            </div>
+                            <div class="form-group text-center margin-bottom-40">
+                                <input type="submit" value="<?php echo trans('cart.pay_now'); ?>" class="btn-u btn-u-blue">
+                            </div>
+                        </form>
+                    <?php elseif($shoppingCart->type == "check"): ?>
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php
+                                        if(count($electronic)>0){echo $electronic[0]->content;}
+                                    ?>
+                                </div>
+                                <div class="col-md-12 text-right">
+                                    <a href="https://seamlesschex.com/checkout/QwuCNYYK4WggECMSZ4gmdEDFcLhHlzuONpg//0" class="btn-u btn-u-primary" ><?php echo Lang::get('user.continue'); ?></a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <div class="panel-body cus-form-horizontal">
+                            <?php echo $__env->make('user.sellerbuyer.wiretransfer', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+                            <div class="form-group margin-bottom-20">
+                                <div class="col-md-12 text-center">
+                                    <a href="javascript:void(0)" class="btn-u btn-u-green" onclick="onPrint()" style="background: black">PRINT</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('custom-scripts'); ?>
+        <?php echo HTML::script('/assets/asset_view/js/jquery.print.js'); ?>
+
+        <script type="text/javascript">
+            function onPrint(){
+                $("#printDiv").print();
+            }
+        </script>
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('user.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,118 @@
+
+    <?php $__env->startSection('body'); ?>
+        <h3 class="page-title">Edit Email Template Management</h3>
+        <!-- page layout -->
+        <div class="page-bar">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="<?php echo URL::route('admin.dashboard'); ?>">Home</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <i class="fa fa-pencil"></i>
+                    <a href="<?php echo URL::route('admin.email'); ?>">Email Template Management</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="<?php echo URL::route('admin.email.edit',$email->id); ?>">Edit Email Template</a>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet box blue">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Edit Email Template
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <?php if($errors->has()): ?>
+                        <div class="alert alert-danger alert-dismissibl fade in">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <?php foreach($errors->all() as $error): ?>
+                                <?php echo $error; ?>
+
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
+                        <form  class="form-horizontal" id="signupform" method="POST" action="<?php echo URL::route('admin.email.store'); ?>" enctype="multipart/form-data">
+                            <div class="form-body">
+                                <input type="hidden" value="<?php echo $email->id; ?>" name="email_id">
+                                  <?php foreach([
+                                    'title' => 'Email Title:',
+                                    'content' => 'Email Content:'
+                                    ]
+                                     as $key=> $value): ?>
+                                      <?php if($key === 'title'): ?>
+                                           <div class="form-group" id="countryname">
+                                               <label class="col-md-3 col-sm-3 col-xs-12 control-label"><?php echo Form::label($key, $value); ?> <span style="color:red">*</span></label>
+                                               <div class="col-md-7 col-sm-7 col-xs-12">
+                                                  <textarea class="form-control" name="title" id="title" readonly><?php echo $email->title; ?></textarea>
+                                               </div>
+                                           </div>
+                                      <?php else: ?>
+                                            <div class="form-group" id="countryname">
+                                               <label class="col-md-3 col-sm-3 col-xs-12 control-label"><?php echo Form::label($key, $value); ?> <span style="color:red">*</span></label>
+                                               <div class="col-md-7 col-sm-7 col-xs-12">
+                                                  <textarea class="form-control" name="content" id="content"><?php echo $email->content; ?></textarea>
+                                                  <input type="hidden" name="realContent" id="realContent" >
+                                               </div>
+                                           </div>
+                                      <?php endif; ?>
+                                  <?php endforeach; ?>
+                            </div>
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-offset-7 col-md-5">
+                                        <button   class="btn  blue" type="button" onclick="onSaveEmail()" ><i class="fa fa-check-circle-o" style="margin-right:4px"></i>Save</button>
+                                        <a class="btn  green" href="<?php echo URL::route('admin.email'); ?>"><i class="fa fa-repeat" style="margin-right:4px"></i>Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('custom-scripts'); ?>
+        <script type="text/javascript">
+             jQuery(document).ready(function() {
+                tinymce.init({
+                      selector: "textarea#content",
+                        theme: "modern",
+                        plugins: [
+                            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+                            "searchreplace wordcount visualblocks visualchars code fullscreen",
+                            "insertdatetime media nonbreaking save table contextmenu directionality",
+                            "emoticons template paste textcolor colorpicker textpattern"
+                        ],
+                        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+                        toolbar2: "print preview media | forecolor backcolor emoticons",
+                        image_advtab: true,
+                        height:350,
+                        templates: [
+                            {title: 'Test template 1', content: 'Test 1'},
+                            {title: 'Test template 2', content: 'Test 2'}
+                        ]
+                    });
+             });
+             function onSaveEmail(){
+                var subContent =tinymce.get('content').getContent();
+                if(subContent  == "" || subContent == "<p></p>"){
+                    bootbox.alert("Please insert content");
+                    return;
+                }
+                $('#realContent').val(subContent);
+
+                $("#signupform").submit();
+             }
+        </script>
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

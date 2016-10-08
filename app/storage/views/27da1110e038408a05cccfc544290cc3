@@ -1,0 +1,134 @@
+
+     <?php $__env->startSection('custom-styles'); ?>
+         <?php echo HTML::style('/assets/asset_view/plugins/animate.css'); ?>
+
+         <?php echo HTML::style('/assets/asset_view/css/blocks.css'); ?>
+
+         <?php echo HTML::style('/assets/asset_view/plugins/sky-forms-pro/skyforms/css/sky-forms.css'); ?>
+
+         <?php echo HTML::style('/assets/asset_view/plugins/sky-forms-pro/skyforms/custom/custom-sky-forms.css'); ?>
+
+         <?php echo HTML::style('/assets/asset_view/css/forestChange.css'); ?>
+
+     <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('body'); ?>
+
+        <div class="breadcrumbs">
+            <div class="container">
+                <h1 class="pull-left">
+                    <?php
+                        echo ucfirst($subCategoryID->subcategoryname);
+                    ?>
+                </h1>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 40px;">
+
+            <div class="row">
+                <div class="col-md-3 col-sm-3" >
+                    <ul class="list-group sidebar-nav-v1" id="sidebar-nav">
+                       <?php $i=0;?>
+                       <?php foreach($category as $categories): ?>
+                          <li class="list-group-item list-toggle <?php if($selectCategory==$categories->id) {echo "active";}?>">
+                               <a data-toggle="collapse" data-parent="#sidebar-nav" href="#collapse<?php echo $i;?>"><?php echo $categories->categoryname; ?></a>
+                               <ul id="collapse<?php echo $i;?>" <?php if($selectCategory==$categories->id) {?> class="collapse in" aria-expanded="true" <?php }else{?>class="collapse"<?php }?>>
+                                   <?php $subCategory = $categories->subCategories;?>
+                                   <?php foreach($subCategory as $subCategories): ?>
+                                       <li class="<?php if($subCategories->id ==$selectSubCategory ){echo "active";} ?>">
+                                           <a href="<?php echo URL::route('user.category.sub',(100000*1+$subCategories->id)); ?>"><?php echo ucfirst($subCategories->subcategoryname); ?></a>
+                                       </li>
+                                   <?php endforeach; ?>
+                               </ul>
+                          </li>
+                          <?php $i++; ?>
+                       <?php endforeach; ?>
+                   </ul>
+                </div>
+                <div class="col-md-9 col-sm-9">
+                    <div class="row margin-bottom-40">
+                         <form action="<?php echo URL::route('user.category.search'); ?>">
+                            <div class="col-md-9 col-sm-9 col-xs-9" id="bloodhound">
+                                <input type="text" class="form-control" placeholder='<?php echo Lang::get('user.what_you_are_looking_for'); ?>' id="helpSearchText" name="searchTitle">
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-3 helpSearchButtonDiv">
+                                <button class="btn-u btn-u-blue helpSearchButton"><i class="search fa fa-search search-button"></i> <?php echo Lang::get('user.search_product'); ?></button>
+                            </div>
+                        </form>
+                    </div>
+                <?php foreach($helps as $help): ?>
+                    <div class="row margin-bottom-40">
+                         <div class="shadow-wrapper">
+                             <blockquote class="hero box-shadow shadow-effect-2">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4">
+                                        <?php
+                                            $productImage = $help->productpicture;
+                                        ?>
+										<a href="<?php echo URL::route('user.showProduct',(100000*1+$help->id)); ?>">
+                                        <?php if(count($productImage)>0): ?>
+                                        <img src="<?php echo HTTP_LOGO_PATH.$productImage[0]->picture_url; ?>" class="imageUrl">
+                                        <?php else: ?>
+                                            <img src="/assets/asset_view/img/main/img1.jpg" class="imageUrl">
+                                        <?php endif; ?>
+										</a>
+                                    </div>
+                                    <div class="col-md-8 col-sm-8">
+                                        <div class="row">
+                                            <div class="col-md-12 margin-bottom-20">
+                                                <a href="<?php echo URL::route('user.showProduct',(100000*1+$help->id)); ?>" class="helpSize"><?php echo $help->product_name; ?></a>
+                                            </div>
+                                            <div class="col-md-12 margin-bottom-20">
+                                                 <p>
+                                                     <?php echo $help->productCurrencyPrice1->currency_symbol.number_format($help->product_price1,2)." ". $help->productCurrencyPrice1->currency_name; ?>
+
+                                                 </p>
+                                                 <p>
+                                                    <?php echo Lang::get('user.min_order'); ?>
+
+                                                    <?php echo $help->min_order." ".$help->minOrderUnit->unitname ;?>
+                                                 </p>
+                                                 <p>
+                                                     <?php echo Lang::get('user.supply_ability'); ?>
+
+                                                     <?php echo $help->supply_ability." ".$help->supplyAbilityUnit->unitname ;?>
+                                                  </p>
+                                                  <?php /*<p>*/ ?>
+                                                    <?php /*<?php echo Lang::get('user.meta'); ?>*/ ?>
+                                                    <?php // echo $help->meta ;?>
+                                                  <?php /*</p>*/ ?>
+                                                <p>
+                                                    <img src="<?php echo HTTP_LOGO_PATH.$help->member->country->country_flag; ?>">
+                                                    <?php echo $help->member->country->country_name; ?>
+
+                                                </p>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <a href="<?php echo URL::route('user.contact',(100000*1+$help->user_id)); ?>" class="btn-u btn-u-orange" target="_blank"><i class=" fa fa-pencil-square-o"></i> <?php echo Lang::get('user.contact_seller'); ?></a>
+                                                <a href = "<?php echo URL::route('user.seller.store',(100000*1+$help->user_id)); ?>" class="btn-u btn-u-blue" target="_blank"><i class="fa fa-bars"></i> <?php echo Lang::get('user.seller_store'); ?></a>
+                                                <?php /*<form action="<?php echo URL::route('user.addCart'); ?>" method="post" style="display: inline-block;">*/ ?>
+                                                    <?php /*<input type="hidden" name="product_id" value="<?php echo (100000*1+$help->id); ?>">*/ ?>
+                                                    <?php /*<button type="submit" class="btn-u btn-u-green"><i class="fa fa-shopping-cart"></i> <?php echo Lang::get('user.add_cart'); ?></button>*/ ?>
+                                                <?php /*</form>*/ ?>
+                                                <a href="<?php echo URL::route('user.showProduct',100000*1+$help->id); ?>" class="btn-u btn-u-green"><i class="fa fa-shopping-cart"></i> <?php echo Lang::get('user.add_cart'); ?></a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                             </blockquote>
+                         </div>
+                    </div>
+                <?php endforeach; ?>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <?php echo $helps->links(); ?>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('user.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,124 @@
+
+	<?php $__env->startSection('title'); ?>
+		Purchasetree.com
+	<?php $__env->stopSection(); ?>
+	<?php $__env->startSection('styles'); ?>
+	    <link rel='stylesheet' type='text/css' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin'>
+	    <?php echo HTML::style('//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin'); ?>
+
+        <?php echo HTML::style('/assets/asset_view/plugins/bootstrap/css/bootstrap.min.css'); ?>
+
+        <?php echo HTML::style('/assets/asset_view/css/shop.style.css'); ?>
+
+        <?php echo HTML::style('/assets/asset_view/plugins/animate.css'); ?>
+
+        <?php echo HTML::style('/assets/asset_view/plugins/line-icons/line-icons.css'); ?>
+
+        <?php echo HTML::style('/assets/asset_view/plugins/font-awesome/css/font-awesome.min.css'); ?>
+
+        <?php echo HTML::style('/assets/asset_view/css/pages/page_log_reg_v2.css'); ?>
+
+        <?php echo HTML::style('/assets/asset_view/css/custom.css'); ?>
+
+         <?php echo HTML::style('/assets/asset_view/css/app.css'); ?>
+
+	<?php $__env->stopSection(); ?>
+	<?php $__env->startSection('content'); ?>
+	    <body>
+        <!--=== Content Part ===-->
+        <div class="container">
+            <!--Reg Block-->
+            <form method="post" action="<?php echo URL::route('user.auth.doLogin'); ?>">
+                <div class="reg-block">
+                    <div class="reg-block-header">
+                        <h2><?php echo Lang::get('user.sign_in'); ?></h2>
+                        <p><?php echo Lang::get('user.don_have'); ?> <a class="color-green" href="<?php echo URL::route('user.auth.register'); ?>"><?php echo Lang::get('user.sign_up'); ?></a> <?php echo Lang::get('user.to_registration'); ?></p>
+                    </div>
+                    <?php if($errors->has()): ?>
+                        <div class="alert alert-danger alert-dismissibl fade in">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <?php foreach($errors->all() as $error): ?>
+                                <?php echo $error; ?>
+
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                     <?php if (isset($alert)) { ?>
+                        <div class="alert alert-<?php echo $alert['type'];?> alert-dismissibl fade in">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <p>
+                                <?php echo $alert['msg'];?>
+                            </p>
+                        </div>
+                    <?php } ?>
+                     <div class="input-group margin-bottom-20">
+                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                        <input type="text" class="form-control" placeholder="<?php echo Lang::get('user.user_name_or_email'); ?>" name="username">
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-12 col-sm-12 text-right">
+                            <a href="<?php echo URL::route('user.auth.forgot'); ?>" class="color-green"><?php echo Lang::get('user.forgot_password'); ?></a>
+                        </div>
+                    </div>
+                    <div class="input-group margin-bottom-20">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        <input type="password" class="form-control" placeholder="<?php echo Lang::get('user.password'); ?>" name="password">
+                    </div>
+                    <div class="input-group" style="float: right">
+                        <?php echo Form::captcha(['id' => 'captcha1']); ?>
+
+                    </div>
+                    <?php /*<div class="input-group margin-bottom-20">*/ ?>
+                        <?php /*<span class="input-group-addon"><i class="fa fa-key"></i></span>*/ ?>
+                        <?php /*<input type="text" class="form-control" placeholder="<?php echo Lang::get('user.captcha'); ?>" name="security">*/ ?>
+                    <?php /*</div>*/ ?>
+
+                     <div class="row ">
+                        <div class="col-md-10 col-md-offset-1 margin-bottom-40" style="margin-top: 20px">
+                            <button type="submit" class="btn-u btn-block"><?php echo Lang::get('user.login'); ?></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div><!--/container-->
+        <!--=== End Content Part ===-->
+        <?php echo Captcha::scriptWithCallback(['captcha1']); ?>
+
+	<?php $__env->stopSection(); ?>
+	<?php $__env->startSection('scripts'); ?>
+            <?php echo HTML::script('/assets/asset_view/plugins/jquery/jquery.min.js'); ?>
+
+            <?php echo HTML::script('/assets/asset_view/plugins/jquery/jquery-migrate.min.js'); ?>
+
+            <?php echo HTML::script('/assets/asset_view/plugins/bootstrap/js/bootstrap.min.js'); ?>
+
+            <?php echo HTML::script('/assets/asset_view/plugins/back-to-top.js'); ?>
+
+            <?php echo HTML::script('/assets/asset_view/plugins/backstretch/jquery.backstretch.min.js'); ?>
+
+            <?php echo HTML::script('/assets/asset_view/js/custom.js'); ?>
+
+            <?php echo HTML::script('/assets/asset_view/js/app.js'); ?>
+
+            <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+            <script>
+                jQuery(document).ready(function() {
+                    App.init();
+                 });
+                $.backstretch([
+                       "/assets/asset_view/img/bg/19.jpg",
+                       "/assets/asset_view/img/bg/18.jpg",
+                       ], {
+                         fade: 1000,
+                         duration: 7000
+                });
+            </script>
+    	<?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('main', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

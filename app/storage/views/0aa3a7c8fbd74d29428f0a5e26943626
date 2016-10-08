@@ -1,0 +1,273 @@
+
+    <?php $__env->startSection('custom-styles'); ?>
+        <?php echo HTML::style('/assets/asset_view/css/forestchange.css'); ?>
+
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('body'); ?>
+        <div class="container content">
+            <div class="col-md-12 text-center  margin-bottom-30">
+                <h2><?php echo Lang::get('user.purchasetree_escrow'); ?></h2>
+            </div>
+            <div class="col-md-12">
+                <div class="alert alert-success">
+                    <span class="caption-subject escrow-index-success-header">
+                        <?php echo Lang::get('user.Welcome'); ?> <?php echo $account->userfullname; ?>
+
+                    </span>
+                    <br>
+                    <strong><?php echo Lang::get('success'); ?>!</strong> <?php echo Lang::get('user.you_can_use_escrow'); ?>
+
+                </div>
+                <div class="alert alert-info">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <h4><?php echo Lang::get('user.your_account_information'); ?></h4>
+                            <p><span><?php echo Lang::get('user.user_name'); ?>:</span>  <span><?php echo $account->username; ?></span></p>
+                            <p><span><?php echo Lang::get('user.email'); ?>:</span>  <span><?php echo $account->useremail; ?></span></p>
+                            <a href="#"><?php echo Lang::get('user.update_your_information'); ?></a>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <h4><?php echo Lang::get('user.need_help'); ?></h4>
+                             <p><?php echo Lang::get('user.contact_the_24'); ?> <a href="#"><?php echo Lang::get('user.support_desk'); ?></a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-warning">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4><?php echo Lang::get('user.start_an_escrow_transaction'); ?></h4>
+                            <div class="row">
+                            <?php if (isset($alert)) { ?>
+                                 <div class="alert alert-<?php echo $alert['type'];?> alert-dismissibl fade in">
+                                     <button type="button" class="close" data-dismiss="alert">
+                                         <span aria-hidden="true">&times;</span>
+                                         <span class="sr-only">Close</span>
+                                     </button>
+                                     <p>
+                                         <?php echo $alert['msg'];?>
+                                     </p>
+                                 </div>
+                             <?php } ?>
+                                <form action="<?php echo URL::route('user.escrow.transaction'); ?>" method="post">
+                                    <?php /*<div class="col-md-12 col-sm-12">*/ ?>
+                                        <?php /*<div class="form-group">*/ ?>
+                                            <?php /*<label class="control-label"><?php echo Lang::get('user.i_am'); ?></label>*/ ?>
+                                            <?php /*<select name="type" class="form-control">*/ ?>
+                                                <?php /*<option value="1" ><?php echo Lang::get('user.seller'); ?></option>*/ ?>
+                                                <?php /*<option value="2" ><?php echo Lang::get('user.buyer'); ?></option>*/ ?>
+                                            <?php /*</select>*/ ?>
+                                        <?php /*</div>*/ ?>
+                                    <?php /*</div>*/ ?>
+                                   <div class="col-md-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="control-label"><?php echo Lang::get('user.item'); ?></label>
+                                            <select class="form-control" name="item" onchange="onSelectItem()" id="selectItem">
+                                                <option value="">-- Select Item --</option>
+                                                <?php foreach($quoteList as $quote): ?>
+                                                    <option value="<?php echo $quote->id; ?>"><?php echo $quote->rfq->rfq_title; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="control-label"><?php echo Lang::get('user.escrow_price'); ?></label>
+                                            <input type="text" class="form-control" name="escrowPrice" id="escrowPrice">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="control-label"><?php echo Lang::get('user.to_purchasetree_username'); ?></label>
+                                            <input type="text" class="form-control" name="username" id="username">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12">
+                                        <input type="submit" value="<?php echo Lang::get('user.start_transaction'); ?>" class="btn-u btn-u-blue">
+                                        <div id="spin"></div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="alert alert-success">
+                            <h4><?php echo Lang::get('user.items_you_are_selling'); ?></h4>
+                            <table class="table table-bordered ">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <?php echo Lang::get('user.escrow_id'); ?>
+
+                                        </td>
+                                        <td>
+                                            <?php echo Lang::get('user.item'); ?>
+
+                                        </td>
+                                        <td>
+                                            <?php echo Lang::get('user.status'); ?>
+
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($sellerList as $key=>$sellerItem): ?>
+                                        <tr>
+                                            <td>
+                                                <a href = "<?php echo URL::route('user.escrow.escrow', $sellerItem->escrow_id); ?>"><?php echo $sellerItem->escrow_id; ?></a>
+                                            </td>
+                                            <td><?php echo $sellerItem->item; ?></td>
+                                            <td>
+                                                <?php if($sellerItem->status == 1): ?>
+                                                    <?php echo Lang::get('user.waiting_for_payment'); ?>
+
+                                                <?php elseif($sellerItem->status ==2): ?>
+                                                    <?php if($sellerItem->confirm == 1): ?>
+                                                       <?php echo Lang::get('user.the_money_are_in_escrow'); ?>
+
+                                                    <?php elseif($sellerItem->confirm == 0): ?>
+                                                        <?php echo Lang::get('user.wait_confirm'); ?>
+
+                                                    <?php endif; ?>
+                                                <?php elseif($sellerItem->status == 3): ?>
+                                                    <?php if($sellerItem->confirm =="2"): ?>
+                                                        <?php echo Lang::get('user.the_money_are_in_dispute'); ?>
+
+                                                    <?php elseif($sellerItem->confirm== "3"): ?>
+                                                        <?php echo Lang::get('user.dispute_solved'); ?>
+
+                                                    <?php endif; ?>
+                                                <?php elseif($sellerItem->status == 4): ?>
+                                                    <?php echo Lang::get('user.the_payment_was_canceled'); ?>
+
+                                                <?php elseif($sellerItem->status == 5): ?>
+                                                    <?php echo Lang::get('user.the_payment_was_approved'); ?>
+
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-info">
+                             <h4><?php echo Lang::get('user.items_you_are_buying'); ?></h4>
+                            <table class="table table-bordered ">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <?php echo Lang::get('user.escrow_id'); ?>
+
+                                        </td>
+                                        <td>
+                                            <?php echo Lang::get('user.item'); ?>
+
+                                        </td>
+                                        <td>
+                                            <?php echo Lang::get('user.status'); ?>
+
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($buyerList as $key=>$buyerItem): ?>
+                                        <tr>
+                                            <td>
+
+                                                <a href = "<?php echo URL::route('user.escrow.escrow', $buyerItem->escrow_id); ?>"><?php echo $buyerItem->escrow_id; ?></a>
+                                            </td>
+                                            <td><?php echo $buyerItem->item; ?></td>
+                                            <td>
+                                                <?php if($buyerItem->status == 1): ?>
+                                                    <?php echo Lang::get('user.waiting_for_payment'); ?>
+
+                                                <?php elseif($buyerItem->status ==2): ?>
+                                                    <?php if($buyerItem->confirm == 1): ?>
+                                                       <?php echo Lang::get('user.the_money_are_in_escrow'); ?>
+
+                                                    <?php elseif($buyerItem->confirm == 0): ?>
+                                                        <?php echo Lang::get('user.wait_confirm'); ?>
+
+                                                    <?php endif; ?>
+                                                <?php elseif($buyerItem->status == 3): ?>
+                                                    <?php if($buyerItem->confirm =="2"): ?>
+                                                        <?php echo Lang::get('user.the_money_are_in_dispute'); ?>
+
+                                                    <?php elseif($buyerItem->confirm== "3"): ?>
+                                                        <?php echo Lang::get('user.dispute_solved'); ?>
+
+                                                    <?php endif; ?>
+                                                <?php elseif($buyerItem->status == 4): ?>
+                                                    <?php echo Lang::get('user.the_payment_was_canceled'); ?>
+
+                                                <?php elseif($buyerItem->status == 5): ?>
+                                                    <?php echo Lang::get('user.the_payment_was_approved'); ?>
+
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('custom-scripts'); ?>
+        <?php echo HTML::script('/assets/assest_admin/js/spin.js'); ?>
+
+        <script type="text/javascript">
+            function onSelectItem(){
+                var selectItem = $("#selectItem").val();
+                if(selectItem){
+                $("#spin").css('display','block');
+                var opts = {
+                  lines: 7, // The number of lines to draw
+                  length: 6, // The length of each line
+                  width: 5, // The line thickness
+                  radius: 8, // The radius of the inner circle
+                  corners: 1, // Corner roundness (0..1)
+                  rotate: 90, // The rotation offset
+                  direction: 1, // 1: clockwise, -1: counterclockwise
+                  color: '#000', // #rgb or #rrggbb or array of colors
+                  speed: 0.7, // Rounds per second
+                  trail: 60, // Afterglow percentage
+                  shadow: false, // Whether to render a shadow
+                  hwaccel: false, // Whether to use hardware acceleration
+                  className: 'spinner', // The CSS class to assign to the spinner
+                  zIndex: 2e9, // The z-index (defaults to 2000000000)
+                  top: 'auto', // Top position relative to parent in px
+                  left: 'auto' // Left position relative to parent in px
+                };
+                var target = document.getElementById('spin');
+                var spinner = new Spinner(opts).spin(target);
+                    var base_url = window.location.origin;
+                   $.ajax ({
+                        url: base_url + '/escrow/getPrice',
+                        type: 'POST',
+                        data: {selectItem : selectItem},
+                        cache: false,
+                        dataType : "json",
+                        success: function (data) {
+                            $("#spin").css('display','none');
+                            if(data.result == "success"){
+                                $("#escrowPrice").val(data.price);
+                                $("#username").val(data.username);
+                            }
+                        }
+                    });
+                }else{
+                    $("#escrowPrice").val("");
+                    $("#username").val("");
+                }
+            }
+        </script>
+    <?php $__env->stopSection(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('user.escrow.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

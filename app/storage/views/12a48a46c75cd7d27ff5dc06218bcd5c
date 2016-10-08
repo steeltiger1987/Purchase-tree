@@ -1,0 +1,155 @@
+
+<?php $__env->startSection('custom-styles'); ?>
+    <?php echo HTML::style('/assets/asset_view/css/forestchange.css'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('body'); ?>
+    <div class="container content">
+        <div class="col-md-12 text-center margin-bottom-30">
+            <h2><?php echo Lang::get('cart.purchasetree_shopping_cart_escrow'); ?></h2>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <?php if(Session::get('user_type') ==2): ?>
+                    <div class="col-md-12">
+                        <div class="alert alert-success">
+                            <h4><?php echo Lang::get('user.items_you_are_buying'); ?></h4>
+                            <table class="table table-bordered ">
+                                <thead>
+                                <tr>
+                                    <td>
+                                        <?php echo Lang::get('user.escrow_id'); ?>
+
+                                    </td>
+                                    <td>
+                                        <?php echo Lang::get('user.item'); ?>
+
+                                    </td>
+                                    <td>
+                                        <?php echo Lang::get('user.status'); ?>
+
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach($carts as $key =>$cart): ?>
+                                    <?php if($cart->buyer_id == Session::get('user_id')): ?>
+                                        <tr>
+                                            <td> <a href="<?php echo URL::route('user.escrow.escrow',array($cart->invoice_number,1)); ?>"><?php echo $cart->invoice_number; ?></a></td>
+                                            <td>
+                                                <?php $cartProducts = $cart->shoppingCartItems;?>
+                                                <?php echo count($cartProducts); ?>
+
+                                            </td>
+                                            <td>
+                                                <?php if($cart->status ==2): ?>
+                                                    <?php echo Lang::get('user.the_money_are_in_escrow'); ?>
+
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="col-md-6">
+                        <div class="alert alert-success">
+                            <h4><?php echo Lang::get('user.items_you_are_selling'); ?></h4>
+                            <table class="table table-bordered ">
+                                <thead>
+                                <tr>
+                                    <td>
+                                        <?php echo Lang::get('user.escrow_id'); ?>
+
+                                    </td>
+                                    <td>
+                                        <?php echo Lang::get('user.item'); ?>
+
+                                    </td>
+                                    <td>
+                                        <?php echo Lang::get('user.status'); ?>
+
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($carts as $key =>$cart): ?>
+                                        <?php if($cart->buyer_id != Session::get('user_id')): ?>
+                                            <?php
+                                            $cartProducts = $cart->shoppingCartItems;
+                                            $countProduct =0;
+                                            ?>
+                                            <?php foreach($cartProducts as $key_cartProduct =>$cartProduct): ?>
+                                                <?php if($cartProduct->seller_id = $cart->buyer_id): ?>
+                                                    <tr>
+                                                        <td> <a href="<?php echo URL::route('user.escrow.escrow',array($cart->invoice_number,1,$cartProduct->id)); ?>"><?php echo $cart->invoice_number; ?></a></td>
+                                                        <td> 1 </td>
+                                                        <td>
+                                                            <?php if($cart->status ==2): ?>
+                                                                <?php echo Lang::get('user.the_money_are_in_escrow'); ?>
+
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-info">
+                            <h4><?php echo Lang::get('user.items_you_are_buying'); ?></h4>
+                            <table class="table table-bordered ">
+                                <thead>
+                                <tr>
+                                    <td>
+                                        <?php echo Lang::get('user.escrow_id'); ?>
+
+                                    </td>
+                                    <td>
+                                        <?php echo Lang::get('user.item'); ?>
+
+                                    </td>
+                                    <td>
+                                        <?php echo Lang::get('user.status'); ?>
+
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($carts as $key=>$cart): ?>
+                                        <?php if($cart->buyer_id == Session::get('user_id')): ?>
+                                            <tr>
+                                                <td> <a href="<?php echo URL::route('user.escrow.escrow',array($cart->invoice_number,1)); ?>"><?php echo $cart->invoice_number; ?></a></td>
+                                            </tr>
+                                            <td>
+                                                <?php $cartProducts = $cart->shoppingCartItems;?>
+                                                <?php echo count($cartProducts); ?>
+
+                                            </td>
+                                            <td>
+                                                <?php if($cart->status ==2): ?>
+                                                    <?php echo Lang::get('user.the_money_are_in_escrow'); ?>
+
+                                                <?php endif; ?>
+                                            </td>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('user.escrow.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
